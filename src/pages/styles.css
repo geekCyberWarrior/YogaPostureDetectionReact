@@ -1,0 +1,53 @@
+.bg-yoga {
+    background-image: url("../images/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.homeview-container {
+    display: flex;
+    height: 100vh;
+    background-image: url("../images/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.yoga-tutorial-container {
+    padding-top: 5em;
+    height: 100vh;
+    background-image: url("../images/bg.jpg");
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+}
+
+.video-responsive {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+}
+
+.video-responsive iframe {
+    /* left: 30;
+    top: 30; */
+    /* height: 50%;
+    width: 50%;
+    position: absolute;
+    text-align: center;
+    margin: auto auto; */
+
+    display: block;
+    margin: 10% auto;
+}
+
+.center-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+}
