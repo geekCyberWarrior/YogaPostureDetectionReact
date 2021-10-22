@@ -58,8 +58,8 @@ export function AuthProvider({ children }) {
                     // ...
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
+                    // const errorCode = error.code;
+                    // const errorMessage = error.message;
                     reject(error);
                 });
         });
@@ -79,7 +79,7 @@ export function AuthProvider({ children }) {
         });
 
         return unsubscribe;
-    }, [currentUser]);
+    }, [currentUser, auth]);
 
     const value = {
         currentUser,

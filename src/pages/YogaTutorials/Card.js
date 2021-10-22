@@ -1,10 +1,8 @@
 import React from "react";
 
-import Avatar from "@material-ui/core/Avatar";
 import CardComponent from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
-import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
 
 import useStyles from "./styles";
