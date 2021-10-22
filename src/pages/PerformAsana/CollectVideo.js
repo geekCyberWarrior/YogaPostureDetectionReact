@@ -27,6 +27,9 @@ function CollectVideo() {
             scale: 0.8,
         });
         //
+
+        console.log(typeof tf.Floor);
+
         setInterval(() => {
             detect(net);
         }, 500);
@@ -55,7 +58,7 @@ function CollectVideo() {
                 keypoint.position.y,
             ]);
 
-            setCount((prev) => prev+1);
+            setCount((prev) => prev + 1);
             console.log("count", count);
             setCollected((alreadyCollected) => [
                 ...alreadyCollected,
@@ -63,9 +66,9 @@ function CollectVideo() {
             ]);
             console.log("COLLECTEd", collected.length);
 
-            // if (collected.length === NUM_OF_FRAMES) {
-            //   setCollected([]);
-            // }
+            if (collected.length === 30) {
+                setCollected([]);
+            }
         }
     };
 
@@ -104,6 +107,9 @@ function CollectVideo() {
                     }}
                 />
             </header>
+            {collected.map((ele) => (
+                <div>{JSON.stringify(ele)}</div>
+            ))}
         </div>
     );
 }
