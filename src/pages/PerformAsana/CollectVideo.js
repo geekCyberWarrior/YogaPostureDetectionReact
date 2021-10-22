@@ -8,13 +8,16 @@
 // 8. Draw functions DONE
 
 import React, { useRef, useState } from "react";
-// import * as tf from "@tensorflow/tfjs";
+import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
+
+// const NUM_OF_FRAMES = 30;
 
 function CollectVideo() {
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
+    const [collected, setCollected] = useState([]);
     const [count, setCount] = useState(0);
 
     //  Load posenet
@@ -47,18 +50,18 @@ function CollectVideo() {
             // Make Detections
             const pose = await net.estimateSinglePose(video);
             const { keypoints } = pose;
-            keypoints.map((keypoint) => [
+            const mapKeyPoints = keypoints.map((keypoint) => [
                 keypoint.position.x,
                 keypoint.position.y,
             ]);
 
             setCount((prev) => prev+1);
             console.log("count", count);
-            // setCollected((alreadyCollected) => [
-            //     ...alreadyCollected,
-            //     mapKeyPoints,
-            // ]);
-            // console.log("COLLECTEd", collected.length);
+            setCollected((alreadyCollected) => [
+                ...alreadyCollected,
+                mapKeyPoints,
+            ]);
+            console.log("COLLECTEd", collected.length);
 
             // if (collected.length === NUM_OF_FRAMES) {
             //   setCollected([]);
