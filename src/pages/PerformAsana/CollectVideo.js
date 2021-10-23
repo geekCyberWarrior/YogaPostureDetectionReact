@@ -86,7 +86,7 @@ function CollectVideo() {
             fd.append("image_str", webcamRef.current.getScreenshot());
 
             axios
-                .post("http://107.22.91.48:8000", fd, {
+                .post("http://54.174.228.221:8000", fd, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         "Access-Control-Allow-Origin": "*",
