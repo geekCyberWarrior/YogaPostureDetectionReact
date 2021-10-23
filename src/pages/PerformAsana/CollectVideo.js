@@ -7,10 +7,15 @@
 // 7. Drawing utilities from tensorflow DONE
 // 8. Draw functions DONE
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
+
+import "../styles.css";
+
+import axios from "axios";
+// const fs = require("fs");
 
 // const NUM_OF_FRAMES = 30;
 
@@ -19,21 +24,24 @@ function CollectVideo() {
     const canvasRef = useRef(null);
     const [collected, setCollected] = useState([]);
     const [count, setCount] = useState(0);
+    const [started, setStarted] = useState(false);
+    const [net, setNet] = useState();
+    const [asana, setAsana] = useState("");
 
     //  Load posenet
-    const runPosenet = async () => {
-        const net = await posenet.load({
-            inputResolution: { width: 640, height: 480 },
-            scale: 0.8,
-        });
-        //
+    // const runPosenet = async () => {
+    //     const net = await posenet.load({
+    //         inputResolution: { width: 640, height: 480 },
+    //         scale: 0.8,
+    //     });
+    //     //
 
-        console.log(typeof tf.Floor);
+    //     console.log(typeof tf.Floor);
 
-        setInterval(() => {
-            detect(net);
-        }, 500);
-    };
+    //     setInterval(() => {
+    //         detect(net);
+    //     }, 500);
+    // };
 
     const detect = async (net) => {
         if (
@@ -59,57 +67,107 @@ function CollectVideo() {
             ]);
 
             setCount((prev) => prev + 1);
-            console.log("count", count);
+            // console.log("count", count, mapKeyPoints);
             setCollected((alreadyCollected) => [
                 ...alreadyCollected,
                 mapKeyPoints,
             ]);
-            console.log("COLLECTEd", collected.length);
+            // console.log("COLLECTEd", collected.length);
 
-            if (collected.length === 30) {
-                setCollected([]);
-            }
+            // if (collected.length === 30) {
+            //     setCollected([]);
+            // }
+
+            let fd = new FormData();
+            // const image = webcamRef.current.getScreenshot();
+            // fd.append("video", webcamRef.current.getScreenshot());
+
+            // const data = { video: webcamRef.current.getScreenshot() };
+            fd.append("image_str", webcamRef.current.getScreenshot());
+
+            axios
+                .post("http://107.22.91.48:8000", fd, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "Access-Control-Allow-Origin": "*",
+                    },
+                })
+                .then((response) => {
+                    const { data } = response;
+                    if ("asana" in data) {
+                        console.log(data);
+                        setAsana((prev) => prev.concat(" ".concat(data.asana)));
+                    } else {
+                        console.log("waiting");
+                    }
+                });
         }
     };
 
-    runPosenet();
+    const loadMode = async () => {
+        const model = await posenet.load({
+            inputResolution: { width: 640, height: 480 },
+            scale: 0.8,
+        });
+        setNet(model);
+    };
+
+    // runPosenet();
+
+    useEffect(() => {
+        console.log(typeof tf.Floor);
+        loadMode();
+    }, []);
+
+    const handleStart = () => {
+        setStarted(true);
+        console.log(net, "NET", typeof net);
+
+        setInterval(async () => {
+            await detect(net);
+        }, 200);
+    };
 
     return (
         <div className="App">
             <header className="App-header">
-                <Webcam
-                    ref={webcamRef}
-                    style={{
-                        position: "absolute",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        left: 0,
-                        right: 0,
-                        textAlign: "center",
-                        zindex: 9,
-                        width: 640,
-                        height: 480,
-                    }}
-                />
+                <button onClick={handleStart}>START</button>
+                {started && (
+                    <>
+                        <Webcam
+                            ref={webcamRef}
+                            screenshotFormat="image/jpeg"
+                            style={{
+                                position: "absolute",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                left: 0,
+                                right: 0,
+                                textAlign: "center",
+                                zindex: 9,
+                                width: 640,
+                                height: 480,
+                            }}
+                        />
 
-                <canvas
-                    ref={canvasRef}
-                    style={{
-                        position: "absolute",
-                        marginLeft: "auto",
-                        marginRight: "auto",
-                        left: 0,
-                        right: 0,
-                        textAlign: "center",
-                        zindex: 9,
-                        width: 640,
-                        height: 480,
-                    }}
-                />
+                        <canvas
+                            ref={canvasRef}
+                            style={{
+                                position: "absolute",
+                                marginLeft: "auto",
+                                marginRight: "auto",
+                                left: 0,
+                                right: 0,
+                                textAlign: "center",
+                                zindex: 9,
+                                width: 640,
+                                height: 480,
+                            }}
+                        />
+                    </>
+                )}
             </header>
-            {collected.map((ele) => (
-                <div>{JSON.stringify(ele)}</div>
-            ))}
+            {asana.length > 0 && <div className="displayAsana">{asana}</div>}
         </div>
     );
 }
