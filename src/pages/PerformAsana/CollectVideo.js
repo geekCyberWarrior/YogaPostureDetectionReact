@@ -22,8 +22,8 @@ import axios from "axios";
 function CollectVideo() {
     const webcamRef = useRef(null);
     const canvasRef = useRef(null);
-    const [collected, setCollected] = useState([]);
-    const [count, setCount] = useState(0);
+    // const [collected, setCollected] = useState([]);
+    // const [count, setCount] = useState(0);
     const [started, setStarted] = useState(false);
     const [net, setNet] = useState();
     const [asana, setAsana] = useState("");
@@ -49,29 +49,29 @@ function CollectVideo() {
             webcamRef.current !== null &&
             webcamRef.current.video.readyState === 4
         ) {
-            // Get Video Properties
-            const video = webcamRef.current.video;
-            const videoWidth = webcamRef.current.video.videoWidth;
-            const videoHeight = webcamRef.current.video.videoHeight;
+            // // Get Video Properties
+            // const video = webcamRef.current.video;
+            // const videoWidth = webcamRef.current.video.videoWidth;
+            // const videoHeight = webcamRef.current.video.videoHeight;
 
-            // Set video width
-            webcamRef.current.video.width = videoWidth;
-            webcamRef.current.video.height = videoHeight;
+            // // Set video width
+            // webcamRef.current.video.width = videoWidth;
+            // webcamRef.current.video.height = videoHeight;
 
             // Make Detections
-            const pose = await net.estimateSinglePose(video);
-            const { keypoints } = pose;
-            const mapKeyPoints = keypoints.map((keypoint) => [
-                keypoint.position.x,
-                keypoint.position.y,
-            ]);
+            // const pose = await net.estimateSinglePose(video);
+            // const { keypoints } = pose;
+            // const mapKeyPoints = keypoints.map((keypoint) => [
+            //     keypoint.position.x,
+            //     keypoint.position.y,
+            // ]);
 
-            setCount((prev) => prev + 1);
+            // setCount((prev) => prev + 1);
             // console.log("count", count, mapKeyPoints);
-            setCollected((alreadyCollected) => [
-                ...alreadyCollected,
-                mapKeyPoints,
-            ]);
+            // setCollected((alreadyCollected) => [
+            //     ...alreadyCollected,
+            //     mapKeyPoints,
+            // ]);
             // console.log("COLLECTEd", collected.length);
 
             // if (collected.length === 30) {
